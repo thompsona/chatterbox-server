@@ -60,7 +60,15 @@ var validUrl = function(request, response, headers) {
   var statusCode = 200;
   response.writeHead(statusCode, headers);
   if(request.method === 'POST') {
-    response.end("POST successful!");
+    // response.end("POST successful!");
+    var dataHolder = '';
+    request.on('data', function(dataChunk){
+      dataHolder += dataChunk.toString();
+    });
+    request.on('end', function() {
+      data.results.push(JSON.parse(dataHolder));
+      response.end("Successfully POSTED");
+    });
   }
   else if(request.method === 'GET') {
     // response.end("GET successful!");
@@ -68,7 +76,7 @@ var validUrl = function(request, response, headers) {
     response.end();
   }
   else {
-    response.end("SOMETHING ELSE successful!");
+    response.end("Please do a POST or GET request!");
   }
   
 };

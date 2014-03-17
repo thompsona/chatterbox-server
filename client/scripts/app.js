@@ -83,7 +83,7 @@
           contentType: 'application/json',
           // data: {order: '-createdAt'},
           success: function (data) {
-          // console.log(typeof data);
+          // console.log(data + "endofData");
             data = JSON.parse(data);
             app.parseMsg(data);
             app.getRooms(data);
@@ -122,16 +122,16 @@
 
       sendBTfn: function() {
         app.msg.text = $("#toSend").val() || "";
-        if(app.username === null) {
-          alert('please enter username');
+          if(app.username === null) {
+            app.username = 'placeHolderUsername';
         }
         else {
           app.msg.username = app.username;
           app.msg.roomname = app.selectedRoom;
-          app.postMsg(app.msg);
+          app.send(app.msg);
         }
       },
-/*
+
       userphotoBTfn: function() {
         app.msg.userphoto = $("#userphoto").val() || "";
         if(app.msg.userphoto === "" || app.msg.userphoto === undefined) {
@@ -162,7 +162,7 @@
           app.postMsg(app.msg);
         }
       },
-*/
+
   };
 
   $(function(){
