@@ -5,6 +5,21 @@
  * this file and include it in basic-server.js so that it actually works.
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
 
+var data = {
+  results: [
+    {
+      roomname: "lobby",
+      text: "hello",
+      username: "gary"
+    },
+    {
+      roomname: "roooom",
+      text: "it's us!",
+      username: "will&allegra"
+    }
+  ]
+};
+
 var handleRequest = function(request, response) {
   /* the 'request' argument comes from nodes http module. It includes info about the
   request - such as what URL the browser is requesting. */
@@ -14,22 +29,18 @@ var handleRequest = function(request, response) {
 
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  var statusCode = 200;
-
   /* Without this line, this server wouldn't work. See the note
    * below about CORS. */
   var headers = defaultCorsHeaders;
 
   headers['Content-Type'] = "text/plain";
 
-  /* .writeHead() tells our server what HTTP status code to send back */
-  response.writeHead(statusCode, headers);
-
-  /* Make sure to always call response.end() - Node will not send
-   * anything back to the client until you do. The string you pass to
-   * response.end() will be the body of the response - i.e. what shows
-   * up in the browser.*/
-  response.end("Hello, World!");
+  if(request.url === '/1/classes/chatterbox') {
+    validUrl(request, response, headers);
+  }
+  else {
+    invalidUrl(request, response, headers);
+  }
 };
 
 /* These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -42,4 +53,32 @@ var defaultCorsHeaders = {
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
+};
+
+var validUrl = function(request, response, headers) {
+  /* .writeHead() tells our server what HTTP status code to send back */
+  var statusCode = 200;
+  response.writeHead(statusCode, headers);
+  if(request.method === 'POST') {
+    response.end("POST successful!");
+  }
+  else if(request.method === 'GET') {
+    // response.end("GET successful!");
+    response.write(JSON.stringify(data));
+    response.end();
+  }
+  else {
+    response.end("SOMETHING ELSE successful!");
+  }
+  
+};
+var invalidUrl = function(request, response, headers) {
+  /* .writeHead() tells our server what HTTP status code to send back */
+  var statusCode = 400;
+  response.writeHead(statusCode, headers);
+  response.end("Bad Url!");
+};
+
+module.exports = {
+  handleRequest: handleRequest
 };
