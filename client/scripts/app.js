@@ -1,5 +1,5 @@
   var app = window.app;
-  
+
   app = {
 
     server: 'http://localhost:3000/1/classes/chatterbox',
@@ -26,15 +26,13 @@
           app.fetch();
         });
         $(document).on("click",".chatUsername", app.handleUserClicks);
-       
-       app.fetch();
-        // setInterval(app.fetch, 2000);
+
+        setInterval(app.fetch, 2000);
 
     },
 
     send: function(message) {
       $.ajax({
-        // always use this url
         url: app.server,
         type: 'POST',
         data: JSON.stringify(message),
@@ -78,7 +76,6 @@
 
       fetch: function() {
         $.ajax({
-          // always use this url
           url: app.server,
           type: 'GET',
           contentType: 'application/json',
@@ -91,7 +88,6 @@
             //console.log('chatterbox: Message received');
           },
           error: function (data) {
-            // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
             console.error('chatterbox: Failed to get message');
           }
        });
@@ -169,4 +165,3 @@
   $(function(){
     app.init();
   })
-
