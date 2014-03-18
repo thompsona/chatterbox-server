@@ -45,10 +45,8 @@ var defaultCorsHeaders = {
 };
 
 var validUrl = function(request, response, headers) {
-  /* .writeHead() tells our server what HTTP status code to send back */
   var statusCode;
   if(request.method === 'POST') {
-    // response.end("POST successful!");
     statusCode = 201;
     response.writeHead(statusCode, headers);
     var dataHolder = '';
@@ -63,7 +61,6 @@ var validUrl = function(request, response, headers) {
   else if(request.method === 'GET') {
     statusCode = 200;
     response.writeHead(statusCode, headers);
-    // response.end("GET successful!");
     console.log(response.write);
     response.end(JSON.stringify(data));
     // response.end();
@@ -73,10 +70,9 @@ var validUrl = function(request, response, headers) {
     response.writeHead(statusCode, headers);
     response.end("Please do a POST or GET request!");
   }
-  
 };
+
 var invalidUrl = function(request, response, headers) {
-  /* .writeHead() tells our server what HTTP status code to send back */
   var statusCode = 404;
   response.writeHead(statusCode, headers);
   response.end("Bad Url!");
