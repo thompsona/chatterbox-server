@@ -8,9 +8,14 @@
 var fs = require('fs');
 var path = require('path');
 
-var data = {
-  results: []
-};
+var data;
+
+fs.readFile('./data.json', function(err, fileData) {
+  if(err) {
+    throw err;
+  }
+  data = JSON.parse(fileData);
+});
 
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
