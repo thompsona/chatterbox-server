@@ -5,6 +5,8 @@
  * this file and include it in basic-server.js so that it actually works.
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
 
+var fs = require('fs');
+
 var data = {
   results: []
 };
@@ -23,10 +25,37 @@ var handleRequest = function(request, response) {
   var headers = defaultCorsHeaders;
 
   headers['Content-Type'] = "text/plain";
-
-  if(request.url === '/1/classes/chatterbox' || request.url === '/classes/messages' || request.url === '/classes/room1') {
+  if(request.url === '/') {
+    // console.log("Reached /");
+    callHome(request, response, headers);
+  }
+  else if(request.url === '/styles/styles.css') {
+    var statusCode = 200;
+    var data = '';
+    fs.readFile('../client/styles/styles.css', function(error, html) {
+      if(error) {
+        console.log('callHome error');
+      }
+      else {
+        data += html;
+        // console.log("data is: " + data);
+        // console.log(typeof data);
+        headers['Content-Type'] = 'text/css';
+        response.writeHead(statusCode, headers);
+        console.log('data2: ' + data);
+        response.end(data);
+      }
+    });
+  }
+  else if(request.url === '/scripts/config.js' || request.url === '/scripts/Template.js' || request.url === '/scripts/app.js') {
+    jsFiles(request, response, headers, request.url);
+  }
+  else if(request.url === '/1/classes/chatterbox' || request.url === '/classes/messages' || request.url === '/classes/room1') {
     validUrl(request, response, headers);
   }
+  // else if(request.url === '/bower_components/jquery/jquery.min.js' || request.url === '/bower_components/underscore/underscore.js' || request.url === '/bower_components/jquery-prettydate/jquery.prettydate.js') {
+  //   bowerFiles(request, response, headers, request.url);
+  // }
   else {
     invalidUrl(request, response, headers);
   }
@@ -42,6 +71,61 @@ var defaultCorsHeaders = {
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
+};
+
+var bowerFiles = function(request, response, headers, filePath) {
+  var statusCode = 200;
+    var data = '';
+    fs.readFile('..' + filePath, function(error, html) {
+      if(error) {
+        console.log('callHome error');
+      }
+      else {
+        data += html;
+        console.log("data is: " + data);
+        console.log(typeof data);
+        headers['Content-Type'] = 'text/javascript';
+        response.writeHead(statusCode, headers);
+        response.end(data);
+      }
+    });
+};
+
+var jsFiles = function(request, response, headers, filePath) {
+  var statusCode = 200;
+    var data = '';
+    fs.readFile('../client' + filePath, function(error, html) {
+      if(error) {
+        console.log('callHome error');
+      }
+      else {
+        data += html;
+        // console.log("data is: " + data);
+        // console.log(typeof data);
+        headers['Content-Type'] = 'text/javascript';
+        response.writeHead(statusCode, headers);
+        response.end(data);
+      }
+    });
+};
+
+var callHome = function(request, response, headers) {
+  var statusCode = 200;
+  var data = '';
+  fs.readFile('../client/index.html', function(error, html) {
+    if(error) {
+      console.log('callHome error');
+    }
+    else {
+      data += html;
+      // console.log("data is: " + data);
+      // console.log(typeof data);
+      headers['Content-Type'] = 'text/html';
+      response.writeHead(statusCode, headers);
+      console.log('data2: ' + data);
+      response.end(data);
+    }
+  });
 };
 
 var validUrl = function(request, response, headers) {
@@ -61,7 +145,6 @@ var validUrl = function(request, response, headers) {
   else if(request.method === 'GET') {
     statusCode = 200;
     response.writeHead(statusCode, headers);
-    console.log(response.write);
     response.end(JSON.stringify(data));
     // response.end();
   }
