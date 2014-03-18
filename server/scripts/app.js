@@ -2,7 +2,7 @@
 
   app = {
 
-    server: 'http://localhost:3000/1/classes/chatterbox',
+    server: 'http://localhost:3001/1/classes/chatterbox',
     // server: 'https://api.parse.com/1/classes/chatterbox',
     stringHtml: "",
     username: null,
@@ -81,8 +81,6 @@
           contentType: 'application/json',
           // data: {order: '-createdAt'},
           success: function (data) {
-          // console.log(data + "endofData");
-            data = JSON.parse(data);
             app.parseMsg(data);
             app.getRooms(data);
             //console.log('chatterbox: Message received');
