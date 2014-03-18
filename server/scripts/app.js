@@ -156,7 +156,7 @@
           app.msg.text = $("#toSend").val() || "";
           app.msg.username = app.username;
           app.msg.roomname = newRoom;
-          app.postMsg(app.msg);
+          app.send(app.msg);
         }
       },
 
