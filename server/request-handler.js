@@ -6,18 +6,7 @@
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
 
 var data = {
-  results: [
-    {
-      roomname: "lobby",
-      text: "hello",
-      username: "gary"
-    },
-    {
-      roomname: "roooom",
-      text: "it's us!",
-      username: "will&allegra"
-    }
-  ]
+  results: []
 };
 
 var handleRequest = function(request, response) {
@@ -35,7 +24,7 @@ var handleRequest = function(request, response) {
 
   headers['Content-Type'] = "text/plain";
 
-  if(request.url === '/1/classes/chatterbox') {
+  if(request.url === '/1/classes/chatterbox' || request.url === '/classes/messages') {
     validUrl(request, response, headers);
   }
   else {
@@ -57,10 +46,11 @@ var defaultCorsHeaders = {
 
 var validUrl = function(request, response, headers) {
   /* .writeHead() tells our server what HTTP status code to send back */
-  var statusCode = 200;
-  response.writeHead(statusCode, headers);
+  var statusCode;
   if(request.method === 'POST') {
     // response.end("POST successful!");
+    statusCode = 201;
+    response.writeHead(statusCode, headers);
     var dataHolder = '';
     request.on('data', function(dataChunk){
       dataHolder += dataChunk.toString();
@@ -71,22 +61,30 @@ var validUrl = function(request, response, headers) {
     });
   }
   else if(request.method === 'GET') {
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
     // response.end("GET successful!");
     response.write(JSON.stringify(data));
     response.end();
   }
   else {
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
     response.end("Please do a POST or GET request!");
   }
   
 };
 var invalidUrl = function(request, response, headers) {
   /* .writeHead() tells our server what HTTP status code to send back */
-  var statusCode = 400;
+  var statusCode = 404;
   response.writeHead(statusCode, headers);
   response.end("Bad Url!");
 };
 
+var handler = function(request, response) {
+
+};
+
 module.exports = {
-  handleRequest: handleRequest
+  handler: handleRequest
 };

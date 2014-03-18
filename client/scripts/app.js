@@ -27,7 +27,8 @@
         });
         $(document).on("click",".chatUsername", app.handleUserClicks);
        
-        setInterval(app.fetch, 2000);
+       app.fetch();
+        // setInterval(app.fetch, 2000);
 
     },
 
