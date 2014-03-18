@@ -24,7 +24,7 @@ var handleRequest = function(request, response) {
 
   headers['Content-Type'] = "text/plain";
 
-  if(request.url === '/1/classes/chatterbox' || request.url === '/classes/messages') {
+  if(request.url === '/1/classes/chatterbox' || request.url === '/classes/messages' || request.url === '/classes/room1') {
     validUrl(request, response, headers);
   }
   else {
@@ -64,8 +64,9 @@ var validUrl = function(request, response, headers) {
     statusCode = 200;
     response.writeHead(statusCode, headers);
     // response.end("GET successful!");
-    response.write(JSON.stringify(data));
-    response.end();
+    console.log(response.write);
+    response.end(JSON.stringify(data));
+    // response.end();
   }
   else {
     statusCode = 200;
@@ -81,9 +82,6 @@ var invalidUrl = function(request, response, headers) {
   response.end("Bad Url!");
 };
 
-var handler = function(request, response) {
-
-};
 
 module.exports = {
   handler: handleRequest
